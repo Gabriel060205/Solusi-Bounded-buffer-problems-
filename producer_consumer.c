@@ -24,7 +24,7 @@ void* producer(void* arg) {
         pthread_mutex_unlock(&mutex);    
         sem_post(&full);                 
 
-        sleep(1); // Simulasi produksi
+        sleep(1);
     }
     return NULL;
 }
@@ -41,7 +41,7 @@ void* consumer(void* arg) {
         pthread_mutex_unlock(&mutex);  
         sem_post(&empty);               
 
-        sleep(2); // Simulasi konsumsi
+        sleep(2);
     }
     return NULL;
 }
@@ -49,20 +49,16 @@ void* consumer(void* arg) {
 int main() {
     pthread_t prodThread, consThread;
 
-    // Inisialisasi semaphore dan mutex
-    sem_init(&empty, 0, SIZE); // Awalnya semua slot kosong
-    sem_init(&full, 0, 0);     // Belum ada item
+    sem_init(&empty, 0, SIZE); 
+    sem_init(&full, 0, 0);    
     pthread_mutex_init(&mutex, NULL);
 
-    // Buat thread producer dan consumer
     pthread_create(&prodThread, NULL, producer, NULL);
     pthread_create(&consThread, NULL, consumer, NULL);
 
-    // Tunggu thread selesai
     pthread_join(prodThread, NULL);
     pthread_join(consThread, NULL);
 
-    // Bersihkan semaphore dan mutex
     sem_destroy(&empty);
     sem_destroy(&full);
     pthread_mutex_destroy(&mutex);
